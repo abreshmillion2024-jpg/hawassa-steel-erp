@@ -307,7 +307,7 @@ tr:hover td{background:#f1f3f5}
 .customer-suggestions div{padding:8px 12px;cursor:pointer;font-size:.85rem;color:var(--tx)}
 .customer-suggestions div:hover{background:var(--bg)}
 .customer-suggestions div.selected{background:var(--ac);color:#fff}</style>
-<link rel="manifest" href="manifest.webmanifest">
+<link rel="manifest" href="./manifest.webmanifest">
 <meta name="theme-color" content="#2c3e50">
 </head>
 <body>
@@ -1920,18 +1920,7 @@ function printReports(){
   <div class="print-footer">
     Printed from Hawassa Steel ERP • Currency: ${currency} • This report is a read-only report and does not change stock.
   </div>
-  
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function () {
-    navigator.serviceWorker.register('./sw.js').catch(function (err) {
-      console.warn('PWA service worker registration failed:', err);
-    });
-  });
-}
-</script>
-
-</body></html>`);
+  </body></html>`);
   w.document.close();
   setTimeout(()=>{w.focus();w.print()},250);
 }
@@ -2257,5 +2246,22 @@ window.addEventListener('DOMContentLoaded',()=>{
   load();drawLoginBg();document.getElementById('lu').focus();
 });
 </script>
+
+<script>
+(function () {
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('./sw.js?v=2', {scope: './'})
+        .then(function (registration) {
+          if (registration.update) registration.update();
+        })
+        .catch(function (err) {
+          console.warn('PWA service worker registration failed:', err);
+        });
+    });
+  }
+})();
+</script>
+
 </body>
 </html>
