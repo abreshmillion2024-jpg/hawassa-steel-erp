@@ -306,12 +306,43 @@ tr:hover td{background:#f1f3f5}
 .customer-suggestions{position:absolute;top:100%;left:0;right:0;background:#fff;border:1px solid var(--bd);border-radius:0 0 var(--r) var(--r);max-height:150px;overflow-y:auto;z-index:50;box-shadow:0 4px 12px rgba(0,0,0,.1)}
 .customer-suggestions div{padding:8px 12px;cursor:pointer;font-size:.85rem;color:var(--tx)}
 .customer-suggestions div:hover{background:var(--bg)}
-.customer-suggestions div.selected{background:var(--ac);color:#fff}</style>
+.customer-suggestions div.selected{background:var(--ac);color:#fff}
+/* ===== Hawassaa Steel branded startup splash ===== */
+#hsSplash{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;
+background:linear-gradient(145deg,#ffffff 0%,#f8fbf9 52%,#eef7f1 100%);transition:opacity .45s ease,visibility .45s ease}
+#hsSplash.hide{opacity:0;visibility:hidden;pointer-events:none}
+.hs-splash-inner{text-align:center;width:min(92vw,520px);padding:28px 20px}
+.hs-splash-logo{width:min(88vw,420px);max-height:230px;object-fit:contain;display:block;margin:0 auto 20px}
+.hs-splash-name{font-size:clamp(22px,5vw,34px);font-weight:800;letter-spacing:.04em;color:#222;text-transform:lowercase}
+.hs-splash-sub{margin-top:8px;font-size:clamp(13px,3vw,18px);font-weight:700;letter-spacing:.16em;color:#0b5d3b}
+.hs-splash-line{height:4px;width:130px;margin:18px auto;border-radius:10px;background:linear-gradient(90deg,#f0b323 0 48%,#0b5d3b 48% 100%)}
+.hs-splash-loading{font-size:13px;color:#68756e;margin-top:14px}
+.hs-splash-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#0b5d3b;margin-right:6px;animation:hsPulse 1s infinite}
+@keyframes hsPulse{0%,100%{opacity:.35;transform:scale(.85)}50%{opacity:1;transform:scale(1.15)}}
+@media(max-width:600px){.hs-splash-logo{max-height:190px}.hs-splash-inner{padding:20px}}
+</style>
 <link rel="manifest" href="./manifest.webmanifest">
-<meta name="theme-color" content="#2c3e50">
+<meta name="theme-color" content="#0b5d3b">
+<link rel="icon" type="image/png" sizes="512x512" href="./icon-512.png">
+
+<meta name="application-name" content="Hawassaa Steel Distribution ERP">
+<meta name="apple-mobile-web-app-title" content="Hawassaa Steel ERP">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="apple-touch-icon" href="./icon-192.png">
+
 </head>
 <body>
 <!-- Login -->
+<!-- Hawassaa Steel branded startup splash -->
+<div id="hsSplash" aria-label="Hawassaa Steel Distribution ERP">
+  <div class="hs-splash-inner">
+    <img class="hs-splash-logo" src="./hawassaa-steal-logo.png" alt="Hawassaa Steel">
+    <div class="hs-splash-sub">DISTRIBUTION ERP</div>
+    <div class="hs-splash-line"></div>
+    <div class="hs-splash-loading"><span class="hs-splash-dot"></span>Loading secure system...</div>
+  </div>
+</div>
 <div id="lp">
   <canvas id="lc"></canvas>
   <div class="lb">
@@ -2248,16 +2279,24 @@ window.addEventListener('DOMContentLoaded',()=>{
 </script>
 
 <script>
-(function () {
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function () {
-      navigator.serviceWorker.register('./sw.js?v=2', {scope: './'})
-        .then(function (registration) {
-          if (registration.update) registration.update();
-        })
-        .catch(function (err) {
-          console.warn('PWA service worker registration failed:', err);
-        });
+(function(){
+  function hideHSSplash(){
+    var s=document.getElementById('hsSplash');
+    if(!s) return;
+    window.setTimeout(function(){ s.classList.add('hide'); }, 1400);
+    window.setTimeout(function(){ if(s.parentNode) s.parentNode.removeChild(s); }, 1950);
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', hideHSSplash);
+  else hideHSSplash();
+})();
+</script>
+<script>
+(function(){
+  if('serviceWorker' in navigator){
+    window.addEventListener('load',function(){
+      navigator.serviceWorker.register('./sw.js?v=4',{scope:'./'})
+        .then(function(r){ if(r.update) r.update(); })
+        .catch(function(e){ console.warn('PWA registration failed:',e); });
     });
   }
 })();
